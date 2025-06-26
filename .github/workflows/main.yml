@@ -17,47 +17,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
+      # Checks-out your repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v3
 
-      # Setup Python
-      - name: Set up Python
+      # Setup Python 3.12.7
+      - name: Set up Python 3.12.7
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12"
-
-      # Install dependencies (MLflow & runtime)
+          python-version: "3.12.7"
+      
+      # Check Env Variables
+      - name: Check Env
+        run: |
+          echo $CSV_URL
+      # Install mlflow
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mlflow pandas scikit-learn
-
-      # Run MLflow project
-      - name: Run MLflow project
+          pip install mlflow  
+          
+      # Run as a mlflow project
+      - name: Run mlflow project
         run: |
-          mlflow run MLproject \
-            -P n_estimators=505 \
-            -P max_depth=37 \
-            -P dataset="MLproject/Obesity Classification Preprocessing.csv" \
-            --env-manager=local
-
+          mlflow run MLproject --env-manager=local 
+      
       # Get latest run_id that contains a model artifact
       - name: Get latest MLflow run_id with model
         run: |
-          FOUND_PATH=$(find mlruns/0 -type d -name "model" | head -n 1)
-          if [ -z "$FOUND_PATH" ]; then
-            echo "❌ No model folder found in artifacts."
-            exit 1
-          fi
-          RUN_ID=$(echo "$FOUND_PATH" | cut -d'/' -f3)
+          RUN_ID=$(find mlruns/0 -type d -name "model" | head -n 1 | cut -d'/' -f3)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "✅ Found run_id: $RUN_ID"
+          echo "Latest run_id with model: $RUN_ID"
 
       # Build Docker Model
-      - name: Build Docker model from MLflow run
+      - name: Build Docker Model
         run: |
-          echo "Using RUN_ID=$RUN_ID"
           mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc"
+
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
@@ -67,11 +62,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Tag the Docker image
-      - name: Tag Docker image
+      - name: Tag Docker Image
         run: |
           docker tag cc ${{ secrets.DOCKER_USERNAME }}/cc:latest
 
       # Push Docker image to Docker Hub
-      - name: Push Docker image
+      - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/cc:latest
