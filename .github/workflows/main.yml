@@ -36,22 +36,30 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow  
           
-      # Run as a mlflow project
-      - name: Run mlflow project
+      # ✅ Step: Jalankan MLflow project
+      - name: Run MLflow project
         run: |
-          mlflow run MLproject --env-manager=local 
-      
-      # Get latest run_id that contains a model artifact
-      - name: Get latest MLflow run_id with model
-        run: |
-          RUN_ID=$(find mlruns/0 -type d -name "model" | head -n 1 | cut -d'/' -f3)
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "Latest run_id with model: $RUN_ID"
+          mlflow run . --env-manager=local
 
-      # Build Docker Model
+      # ✅ Step: Ambil run_id dari model terakhir
+      - name: Get latest MLflow run_id with model
+        id: get_run
+        run: |
+          MODEL_PATH=$(find mlruns/0 -type d -path "*/artifacts/model" | head -n 1)
+          if [ -z "$MODEL_PATH" ]; then
+            echo "No model found!"
+            exit 1
+          fi
+          RUN_ID=$(echo "$MODEL_PATH" | cut -d'/' -f3)
+          echo "run_id=$RUN_ID"
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+
+      # ✅ Step: Build Docker Model menggunakan run_id dari langkah sebelumnya
       - name: Build Docker Model
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc"
+          echo "Using run ID: ${{ steps.get_run.outputs.run_id }}"
+          mlflow models build-docker --model-uri "runs:/${{ steps.get_run.outputs.run_id }}/model" --name "cc"
+
 
 
       # Login to Docker Hub
