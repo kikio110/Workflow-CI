@@ -6,22 +6,22 @@ import mlflow.sklearn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-# Argument parser
+# Ambil argumen dari MLflow atau CLI
 parser = argparse.ArgumentParser()
 parser.add_argument("n_estimators", type=int)
 parser.add_argument("max_depth", type=int)
 parser.add_argument("dataset", type=str)
 args = parser.parse_args()
 
-# Tracking URI opsional (misal saat lokal pakai server)
+# Set tracking URI hanya jika disediakan lewat environment (misalnya lokal)
 tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
 if tracking_uri:
     mlflow.set_tracking_uri(tracking_uri)
 
-# Set experiment (tidak masalah di luar start_run)
+# Set nama eksperimen
 mlflow.set_experiment("Eksperimen klasifikasi berat badan")
 
-# Load data
+# Baca dataset
 data = pd.read_csv(args.dataset)
 X_train, X_test, y_train, y_test = train_test_split(
     data.drop("Label", axis=1),
@@ -30,12 +30,16 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-# Autolog
+# Aktifkan autolog
 mlflow.sklearn.autolog()
 
-# TANPA start_run manual — biarkan MLflow CLI yang mengaturnya
+# Latih model
 model = RandomForestClassifier(n_estimators=args.n_estimators, max_depth=args.max_depth)
 model.fit(X_train, y_train)
 
+# Evaluasi akurasi
 accuracy = model.score(X_test, y_test)
-print("Akurasi:", accuracy)
+print(f"Akurasi: {accuracy}")
+
+# Log model secara eksplisit agar bisa digunakan oleh mlflow models build-docker
+mlflow.sklearn.log_model(model, artifact_path="model")
