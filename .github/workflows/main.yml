@@ -38,9 +38,11 @@ jobs:
           
       # ✅ Step: Jalankan MLflow project
       # Run as a mlflow project
-      - name: Run mlflow project
+      - name: Run MLflow project
         run: |
-          mlflow run MLproject --env-manager=local 
+          cd MLproject
+          mlflow run . --env-manager=local
+
 
       # ✅ Step: Ambil run_id dari model terakhir
       - name: Get latest MLflow run_id with model
