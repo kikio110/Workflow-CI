@@ -42,9 +42,12 @@ jobs:
         run: |
           cd MLproject
           mlflow run . --env-manager=local
-      - name: Build Docker Model from known run_id
+      # Get latest run_id
+      - name: Get latest MLflow run_id
         run: |
-          mlflow models build-docker --model-uri "runs:/a032f57b56034ed0b53c2be0b4fe9342/model" --name cc
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Latest run_id: $RUN_ID"
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
