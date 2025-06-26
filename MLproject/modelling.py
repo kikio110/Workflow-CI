@@ -13,8 +13,8 @@ if __name__ == "__main__":
     np.random.seed(40)
 
     # Ambil parameter dari sys.argv (bisa dari CLI atau MLflow CLI)
-    n_estimators = int(sys.argv[1]) if len(sys.argv) > 1 else 100
-    max_depth = int(sys.argv[2]) if len(sys.argv) > 2 else 5
+    n_estimators = int(sys.argv[1]) if len(sys.argv) > 1 else 505
+    max_depth = int(sys.argv[2]) if len(sys.argv) > 2 else 37
     dataset_path = sys.argv[3] if len(sys.argv) > 3 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "train.csv")
 
     # Set tracking URI dari environment (opsional)
