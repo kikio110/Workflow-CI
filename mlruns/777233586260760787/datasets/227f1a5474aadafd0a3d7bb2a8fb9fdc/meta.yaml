@@ -1,0 +1,10 @@
+digest: 8e51049a
+name: dataset
+profile: '{"num_rows": 86, "num_elements": 430}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "Age", "required": true},
+  {"type": "long", "name": "Gender", "required": true}, {"type": "double", "name":
+  "Height", "required": true}, {"type": "double", "name": "Weight", "required": true},
+  {"type": "double", "name": "BMI", "required": true}]}'
+source: '{"tags": {"mlflow.user": "Sahanatur Rizki", "mlflow.source.name": "modelling.py",
+  "mlflow.source.type": "LOCAL"}}'
+source_type: code

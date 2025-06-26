@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/777233586260760787/1711ae7ee761481f964b480f47ecaea9/artifacts
+end_time: 1749623973857
+entry_point_name: ''
+experiment_id: '777233586260760787'
+lifecycle_stage: active
+run_id: 1711ae7ee761481f964b480f47ecaea9
+run_name: resilient-sponge-874
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749623966565
+status: 4
+tags: []
+user_id: Sahanatur Rizki

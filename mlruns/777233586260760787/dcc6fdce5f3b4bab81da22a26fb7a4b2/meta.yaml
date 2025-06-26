@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/777233586260760787/dcc6fdce5f3b4bab81da22a26fb7a4b2/artifacts
+end_time: 1749624289728
+entry_point_name: ''
+experiment_id: '777233586260760787'
+lifecycle_stage: active
+run_id: dcc6fdce5f3b4bab81da22a26fb7a4b2
+run_name: wistful-goat-792
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749624273827
+status: 3
+tags: []
+user_id: Sahanatur Rizki
