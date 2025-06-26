@@ -37,19 +37,19 @@ if __name__ == "__main__":
     # Input example untuk log_model
     input_example = X_train.head(5)
 
-    with mlflow.start_run():
-        model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth)
-        model.fit(X_train, y_train)
+    
+    model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth)
+    model.fit(X_train, y_train)
 
-        predicted = model.predict(X_test)
-        accuracy = model.score(X_test, y_test)
+    predicted = model.predict(X_test)
+    accuracy = model.score(X_test, y_test)
 
         # Logging model dan metrik
-        mlflow.sklearn.log_model(
+    mlflow.sklearn.log_model(
             sk_model=model,
             artifact_path="model",
             input_example=input_example
         )
-        mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("accuracy", accuracy)
 
-        print(f"Akurasi: {accuracy}")
+    print(f"Akurasi: {accuracy}")
