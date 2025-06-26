@@ -22,9 +22,6 @@ if __name__ == "__main__":
     if tracking_uri:
         mlflow.set_tracking_uri(tracking_uri)
 
-    # Set experiment
-    mlflow.set_experiment("Eksperimen klasifikasi obesitas")
-
     # Load data
     data = pd.read_csv(dataset_path)
     X_train, X_test, y_train, y_test = train_test_split(
