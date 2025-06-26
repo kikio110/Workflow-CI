@@ -37,9 +37,10 @@ jobs:
           pip install mlflow  
           
       # ✅ Step: Jalankan MLflow project
-      - name: Run MLflow project
+      # Run as a mlflow project
+      - name: Run mlflow project
         run: |
-          mlflow run . --env-manager=local
+          mlflow run MLproject --env-manager=local 
 
       # ✅ Step: Ambil run_id dari model terakhir
       - name: Get latest MLflow run_id with model
