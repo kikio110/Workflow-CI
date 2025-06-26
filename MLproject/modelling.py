@@ -1,12 +1,17 @@
 # Import library
+import os
 import mlflow
 import mlflow.sklearn
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-# Set tracking URI dan eksperimen
-mlflow.set_tracking_uri("http://127.0.0.1:5000/")
+# Ambil nilai dari environment variable (jika ada)
+tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+if tracking_uri:
+    mlflow.set_tracking_uri(tracking_uri)
+
+# Set nama eksperimen
 mlflow.set_experiment("Eksperimen klasifikasi berat badan")
 
 # Baca data
@@ -20,7 +25,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     test_size=0.2
 )
 
-# Contoh input (opsional, tidak perlu log manual jika autolog aktif)
+# Input contoh untuk autologging (opsional)
 input_example = X_train[0:5]
 
 # Aktifkan autologging
@@ -31,6 +36,6 @@ with mlflow.start_run():
     model = RandomForestClassifier(n_estimators=505, max_depth=37)
     model.fit(X_train, y_train)
 
-    # Evaluasi (ini akan otomatis dilog oleh autolog, tapi boleh ditampilkan juga)
+    # Evaluasi
     accuracy = model.score(X_test, y_test)
     print("Accuracy:", accuracy)
