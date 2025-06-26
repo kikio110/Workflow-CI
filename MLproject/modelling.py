@@ -17,11 +17,6 @@ if __name__ == "__main__":
     max_depth = int(sys.argv[2]) if len(sys.argv) > 2 else 37
     dataset_path = sys.argv[3] if len(sys.argv) > 3 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "train.csv")
 
-    # Set tracking URI dari environment (opsional)
-    tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
-    if tracking_uri:
-        mlflow.set_tracking_uri(tracking_uri)
-
     # Load data
     data = pd.read_csv(dataset_path)
     X_train, X_test, y_train, y_test = train_test_split(
